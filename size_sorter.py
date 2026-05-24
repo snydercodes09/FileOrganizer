@@ -6,11 +6,12 @@ and moves them into size-based sub-folders.
 
 from __future__ import annotations
 
+import os
 import sys
 import shutil
 from pathlib import Path
 
-from utils import (
+from fo_utils import (
     cleanup_empty_folders,
     get_target_directory,
     prompt_deep_scan,
@@ -165,7 +166,6 @@ def main() -> None:
     
     nested_files: list[Path] = []
     if deep_scan:
-        import os  # Required inside deep scan
         nested_files = deep_scan_files(directory)
 
     moved_count: int = 0

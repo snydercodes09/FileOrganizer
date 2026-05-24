@@ -17,12 +17,13 @@ import shutil
 import sys
 from pathlib import Path
 
-from utils import (
+from fo_utils import (
     cleanup_empty_folders,
     get_target_directory,
     prompt_deep_scan,
     resolve_collision,
 )
+from size_sorter import get_size_category
 
 
 # ---------------------------------------------------------------------------
@@ -158,6 +159,7 @@ def move_files(
     files: list[Path],
     *,
     show_source_path: bool = False,
+    sort_by_size: bool = False,
 ) -> int:
     """Move *files* into categorised sub-folders under *directory*.
 
@@ -179,8 +181,16 @@ def move_files(
         category: str = get_category(file_path)
         category_dir: Path = directory / category
 
+        if sort_by_size:
+            try:
+                stat_info = file_path.stat()
+                size_bucket = get_size_category(stat_info.st_size)
+                category_dir = category_dir / size_bucket
+            except OSError as exc:
+                print(f"  Warning: Cannot read size of '{file_path.name}': {exc}")
+
         # Create the category folder if it does not exist yet.
-        category_dir.mkdir(exist_ok=True)
+        category_dir.mkdir(parents=True, exist_ok=True)
 
         dest_path: Path = category_dir / file_path.name
 
@@ -193,12 +203,12 @@ def move_files(
             if show_source_path:
                 print(
                     f"  Extracted: {file_path}"
-                    f"  →  {category}/{dest_path.name}"
+                    f"  →  {category_dir.relative_to(directory)}/{dest_path.name}"
                 )
             else:
                 print(
                     f"  Moved: {file_path.name}"
-                    f"  →  {category}/{dest_path.name}"
+                    f"  →  {category_dir.relative_to(directory)}/{dest_path.name}"
                 )
         except OSError as exc:
             print(f"  Warning: Could not move '{file_path.name}': {exc}")
@@ -234,6 +244,12 @@ def main() -> None:
     deep_scan: bool = prompt_deep_scan()
     print()
 
+    # Step 2.5 — Size-sort prompt
+    sort_by_size: bool = input(
+        "Do you also want to sort files by size? (Y/N): "
+    ).strip().lower() == "y"
+    print()
+
     # Step 3 — Collect files to organise
     files: list[Path] = scan_files(directory)
     moved_count: int = 0
@@ -250,7 +266,7 @@ def main() -> None:
     if files:
         print(f"Found {len(files)} root-level file(s) to organise.\n")
         print("Moving root-level files …")
-        moved_count = move_files(directory, files)
+        moved_count = move_files(directory, files, sort_by_size=sort_by_size)
     else:
         print("No loose root-level files found.")
 
@@ -262,7 +278,7 @@ def main() -> None:
                 "Extracting …"
             )
             extracted_count = move_files(
-                directory, nested_files, show_source_path=True
+                directory, nested_files, show_source_path=True, sort_by_size=sort_by_size
             )
         else:
             print("\nDeep scan: no nested files found.")

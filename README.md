@@ -1,64 +1,144 @@
-# File Organizer
+# 📂 FileOrganizer Suite
 
-A lightweight, automated Python utility designed to effortlessly declutter directories (such as your Desktop or Downloads folder). The File Organizer scans a target directory, categorizes loose files based on their extensions, moves them into designated subfolders, and safely deletes any leftover empty folders to ensure a perfectly clean workspace.
+A lightweight, automated Python suite designed to effortlessly declutter and organize directories (such as your Desktop or Downloads folder). The suite includes two main utilities:
+1. **Extension-Based Organizer (`file-organizer` / `file_organizer.py`)**: Scans a target directory, categorizes loose files based on their extensions, moves them into designated category subfolders, and safely deletes any leftover empty folders to ensure a perfectly clean workspace.
+2. **Size-Based Sorter (`size-sorter` / `size_sorter.py`)**: Segments Images and/or Videos into precise byte-size subfolders under targeted categories.
 
-It also features an **Optional Deep Scan** mode to recursively extract and organize files buried within nested subdirectories.
+Both tools feature an **Optional Deep Scan** mode to recursively extract and organize files buried within nested subdirectories.
 
-## Features
+---
 
-- **Automated Organization:** Groups files logically by type into clear category folders (`Images/`, `Documents/`, `Media/`, `Archives/`, `Code/`, and `Others/`).
+## ✨ Features
+
+- **Automated Organization:** Groups files logically by type into designated category folders:
+  - 🖼️ `Images/` (e.g., `.jpg`, `.png`, `.gif`, `.heic`)
+  - 📄 `Documents/` (e.g., `.pdf`, `.docx`, `.txt`, `.xlsx`)
+  - 🎬 `Media/` (e.g., `.mp4`, `.mkv`)
+  - 🎵 `Audio/` (e.g., `.mp3`, `.wav`, `.ogg`)
+  - 📦 `Archives/` (e.g., `.zip`, `.rar`, `.7z`)
+  - 💻 `Code/` (e.g., `.py`, `.html`, `.css`, `.js`, `.md`)
+  - ⚙️ `Software/` (e.g., `.exe`, `.msi`, `.iso`)
+  - 📁 `Others/` (default for unrecognized formats)
+- **Size-Based Sorting:** Sub-categorizes images and videos by size criteria (e.g., small, medium, large, huge).
 - **Collision Handling:** Safely renames duplicate files (e.g., appending `_1`, `_2`) so you never accidentally overwrite or lose data.
 - **Empty Folder Cleanup:** Removes leftover empty directories from your workspace automatically (files are **never** deleted).
 - **Deep Scan Mode:** Prompts to optionally traverse all nested subdirectories, extracting hidden files into the root-level category folders.
 - **Platform Agnostic:** Runs flawlessly on Windows, macOS, and Linux using built-in standard-library modules (`os`, `shutil`, `pathlib`).
 
-## Technologies Used
+---
 
-- **Language:** Python 3.x
-- **Core Libraries:** `os`, `shutil`, `pathlib`, `sys`
-- **Testing:** `pytest`
+## 🛠️ Installation & Setup
 
-## Installation
-
-1. Clone the repository to your local machine:
+1. **Clone the repository:**
    ```bash
    git clone <your-repository-url>
    cd FileOrganizer
    ```
 
-2. (Optional but recommended) Ensure you are running Python 3.7 or higher. No external dependencies are required for the main script, but `pytest` is required to run the test suite.
+2. **Python Prerequisites:**
+   No external dependencies are required to run the main scripts. Python 3.9 or higher is recommended. Check your version with:
    ```bash
-   python -m pip install pytest
+   python --version
    ```
 
-## Usage
+3. **Install Globally:**
+   To make the tools runnable anywhere in your terminal (command prompt, PowerShell, git bash, etc.) in any directory, install the package in editable mode:
+   ```bash
+   pip install -e .
+   ```
+   This exposes the `file-organizer` and `size-sorter` commands globally.
 
-Simply run the script from your terminal:
+---
 
+## 🚀 How to Run the Tools
+
+You can run the tools either globally (if installed via `pip install -e .`) or directly using the Python scripts.
+
+### A. Extension-Based Organizer
+Declutters any directory by grouping files logically by type into clear categories.
+
+* **Run via Global Command:**
+  ```bash
+  file-organizer
+  ```
+* **Run via Python Script:**
+  ```bash
+  python file_organizer.py
+  ```
+
+**What to expect during execution:**
+1. **Target Directory Prompt**: The script asks for a path to clean up.
+   * *Tip*: Press **`Enter`** without typing anything to default to your system's **Desktop**.
+2. **Deep Scan Prompt**: It will ask:
+   ```text
+   Do you want to extract and organise files from all sub-folders as well? (Y/N):
+   ```
+   * **`N` (Default)**: Declutters only files in the root level of the target directory. Subfolders are untouched.
+   * **`Y`**: Recursively crawls all sub-directories, extracts nested files to the main category folders, and safely cleans up empty folders bottom-up.
+3. **Size-Sort Prompt**:
+   ```text
+   Do you also want to sort files by size? (Y/N):
+   ```
+   * **`N` (Default)**: Organizes files by extension only.
+   * **`Y`**: Automatically invokes the size-sorting tool for images and videos inside the target directory.
+
+---
+
+### B. Size-Based Sorter
+Segments Images and/or Videos into precise byte-size subfolders under targeted categories.
+
+* **Run via Global Command:**
+  ```bash
+  size-sorter
+  ```
+* **Run via Python Script:**
+  ```bash
+  python size_sorter.py
+  ```
+
+**What to expect during execution:**
+1. **Target Directory Prompt**: Provide the folder path (or press `Enter` for Desktop).
+2. **Sorting Type Selection**:
+   ```text
+   What would you like to sort by size?
+     [1] Images
+     [2] Videos
+     [3] Both
+   Select an option (1/2/3):
+   ```
+3. **Deep Scan Prompt**: Choose whether to scan recursively (Y/N).
+
+---
+
+## 🧪 Running the Test Suite
+
+The test suite contains **58 comprehensive unit and integration tests** validating file routing, name collision safeguards, and empty folder cleanup. All tests execute inside isolated temporary folders using `pytest` fixtures, keeping your system safe.
+
+### 1. Install Pytest
+If you do not have `pytest` installed, run:
 ```bash
-python file_organizer.py
+python -m pip install pytest
 ```
 
-### Flow of Execution:
-1. **Target Directory:** You will be prompted to enter the directory you want to organize. Pressing `Enter` without typing anything defaults to your system's `Desktop`.
-2. **Deep Scan Prompt:** The script asks: *"Do you want to extract and organise files from all sub-folders as well? (Y/N)"*.
-   - **No (Default):** Organizes only root-level loose files.
-   - **Yes:** Recursively finds deeply nested files and extracts them into root category folders.
-3. **Execution & Cleanup:** Files are moved safely. Empty directories are recursively removed from the bottom up.
-4. **Summary:** A summary report is printed to your console, confirming what actions were taken.
-
-## Running Tests
-
-To run the full test suite (41 tests including deep scan integration and collision edge cases):
-
+### 2. Execute Tests
+Run the full test suite in verbose mode:
 ```bash
-python -m pytest test_file_organizer.py -v
+python -m pytest test_file_organizer.py test_size_sorter.py -v
 ```
 
-## Contributing
+---
+
+## 🛡️ Safety & Architecture Safeguards
+
+- **Zero File Deletion**: Under no circumstances will any of your files be deleted. The scripts strictly use `shutil.move` to relocate files.
+- **Safe Empty Folder Removal**: Leftover directories are cleaned up bottom-up using `os.rmdir()`. This command is guaranteed by the OS to fail if a folder contains any files or folders, acting as an automatic safety guard.
+- **Collision Safeguard**: If a file with the same name already exists in the destination folder, a numeric suffix (e.g., `_1`, `_2`) is appended automatically so no files are overwritten.
+
+---
+
+## 🤝 Contributing
 
 Contributions are welcome! To contribute:
-
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature/your-feature-name`).
 3. Make your changes and write additional tests if applicable.
@@ -68,6 +148,8 @@ Contributions are welcome! To contribute:
 
 Please ensure all tests pass (`python -m pytest`) before submitting.
 
-## License
+---
 
-This project is licensed under the MIT License - see the [License](LICENSE) file for details.
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

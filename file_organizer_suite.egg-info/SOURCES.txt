@@ -1,0 +1,11 @@
+LICENSE
+README.md
+file_organizer.py
+fo_utils.py
+pyproject.toml
+size_sorter.py
+file_organizer_suite.egg-info/PKG-INFO
+file_organizer_suite.egg-info/SOURCES.txt
+file_organizer_suite.egg-info/dependency_links.txt
+file_organizer_suite.egg-info/entry_points.txt
+file_organizer_suite.egg-info/top_level.txt

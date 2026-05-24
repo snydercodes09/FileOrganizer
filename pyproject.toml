@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "file-organizer-suite"
+version = "1.0.0"
+description = "A lightweight file organizer"
+dependencies = []
+
+[project.scripts]
+file-organizer = "file_organizer:main"
+size-sorter = "size_sorter:main"
+
+[tool.setuptools]
+py-modules = ["file_organizer", "size_sorter", "fo_utils"]

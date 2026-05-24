@@ -16,7 +16,7 @@ from file_organizer import (
     move_files,
     scan_files,
 )
-from utils import (
+from fo_utils import (
     cleanup_empty_folders,
     prompt_deep_scan,
     resolve_collision,
