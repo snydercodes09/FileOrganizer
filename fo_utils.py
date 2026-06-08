@@ -5,29 +5,15 @@ import sys
 from pathlib import Path
 
 
-def get_default_desktop() -> Path:
-    """Return the platform-independent path to the current user's Desktop."""
-    desktop = Path.home() / "Desktop"
-    if not desktop.exists():
-        raise FileNotFoundError(
-            f"Default Desktop directory not found at '{desktop}'. "
-            "Please provide a valid directory path."
-        )
-    return desktop
-
 
 def get_target_directory() -> Path:
     """Prompt the user for a target directory and validate it."""
     raw_path: str = input(
-        "Enter the target directory path (press Enter for Desktop): "
+        "Enter the target directory path (press Enter for current directory): "
     ).strip()
 
     if not raw_path:
-        try:
-            directory = get_default_desktop()
-        except FileNotFoundError as exc:
-            print(f"Error: {exc}")
-            sys.exit(1)
+        directory = Path.cwd()
     else:
         directory = Path(raw_path)
 
