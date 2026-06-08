@@ -1,3 +1,0 @@
-[console_scripts]
-file-organizer = file_organizer:main
-size-sorter = size_sorter:main

@@ -1,0 +1,22 @@
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest
+.pytest_cache/
+test_results*.txt
+
+# Build Artifacts
+*.egg-info/
+build/
+dist/
+
+# Agent / IDE Configuration
+.agent/
+.agents/
+skills-lock.json
+
+# OS generated files
+.DS_Store
+Thumbs.db
